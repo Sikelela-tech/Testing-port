@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monde Mwansa | Data Science Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@300;400&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333333;
+            scroll-behavior: smooth;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .navy-blue-bg {
+            background-color: #003366;
+        }
+
+        .navy-blue-text {
+            color: #003366;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #003366 0%, #001a33 100%);
+            position: relative;
+        }
+
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skill-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card {
+            perspective: 1000px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .project-card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .project-front,
+        .project-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .project-back {
+            transform: rotateY(180deg);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #003366;
+        }
+
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 20px;
+            width: 1px;
+            height: calc(100% - 20px);
+            background-color: #003366;
+        }
+
+        .timeline-item:last-child:after {
+            display: none;
+        }
+
+        .experience-card {
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .experience-card:hover {
+            transform: translateX(10px);
+        }
+
+        .achievement-badge {
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .achievement-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .contact-input {
+            transition: all 0.3s ease;
+            border: 1px solid #ddd;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .contact-input:focus {
+            border-color: #003366;
+            box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.2);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: #003366;
+        }
+
+        /* Background image sections */
+        .bg-section {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .bg-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        .bg-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Different background images for each section */
+        .skills-bg {
+            background-image: url('background.jpg');
+        }
+
+        .certifications-bg {
+            background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .community-bg {
+            background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .contact-bg {
+            background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold navy-blue-text">Monde Mwansa</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-blue-800 transition">About</a>
+                <a href="#skills" class="hover:text-blue-800 transition">Skills</a>
+                <a href="#projects" class="hover:text-blue-800 transition">Projects</a>
+                <a href="#experience" class="hover:text-blue-800 transition">Experience</a>
+                <a href="#contact" class="hover:text-blue-800 transition">Contact</a>
+            </div>
+            <button class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="about" class="hero-gradient min-h-screen flex items-center pt-16">
+        <div class="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 section">Hi, I'm Monde Mwansa
+                    <span class="wave">👋</span>
+                </h1>
+                <h2 class="text-2xl md:text-3xl text-white mb-6 section">BSc (Hons) Data Science</h2>
+                <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm rounded-lg p-6 section">
+                    <p class="text-white text-lg">
+                        I am a driven data science graduate passionate about solving real-world problems using AI,
+                        machine learning, and thoughtful analysis. Whether I'm mentoring peers, building intelligent
+                        systems, or running workshops, I enjoy contributing to meaningful projects.
+                    </p>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center section">
+                <div class="relative">
+                    <div
+                        class="w-96 h-[34rem] md:w-[32rem] md:h-[38rem] rounded-full bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm border-4 border-white overflow-hidden">
+                        <img src="Picture.JPG" alt="Profile Photo" class="w-full h-full object-cover rounded-full" />
+                    </div>
+                    <div class="absolute -bottom-5 -right-5 bg-white rounded-full p-3 shadow-lg">
+                        <div class="w-12 h-12 rounded-full navy-blue-bg flex items-center justify-center text-white">
+                            <i class="fas fa-code text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section with Background Image -->
+    <section id="skills" class="py-20 bg-section skills-bg">
+        <div class="container mx-auto px-6 bg-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 navy-blue-text section">Skills & Expertise</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Programming Languages -->
+                <div class="section">
+                    <div class="rounded-xl p-6 skill-card">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 rounded-full navy-blue-bg flex items-center justify-center text-white mr-4">
+                                <i class="fas fa-code text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold navy-blue-text">Programming Languages</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Python</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">R</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">SQL</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">MATLAB</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">C++</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools & Frameworks -->
+                <div class="section">
+                    <div class="rounded-xl p-6 skill-card">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 rounded-full navy-blue-bg flex items-center justify-center text-white mr-4">
+                                <i class="fas fa-tools text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold navy-blue-text">Tools & Frameworks</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Power BI</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Scikit-learn</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">TensorFlow</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">NumPy</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Pandas</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Spark</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Hadoop</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Excel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Science Tasks -->
+                <div class="section">
+                    <div class="rounded-xl p-6 skill-card">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 rounded-full navy-blue-bg flex items-center justify-center text-white mr-4">
+                                <i class="fas fa-chart-line text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold navy-blue-text">Data Science Tasks</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Data Analysis</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Deep Learning</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Statistical Modeling</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Data Visualization</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">NLP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soft Skills -->
+                <div class="section">
+                    <div class="rounded-xl p-6 skill-card">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 rounded-full navy-blue-bg flex items-center justify-center text-white mr-4">
+                                <i class="fas fa-users text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold navy-blue-text">Soft Skills</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Leadership</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Communication</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Time Management</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full">Problem-Solving</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 navy-blue-bg">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-white section">Project Showcase</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="section">
+                    <div class="h-64 relative project-card">
+                        <div
+                            class="project-front bg-white rounded-xl p-6 shadow-lg h-full flex flex-col justify-center items-center">
+                            <div
+                                class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-headphones text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-center mb-2">LSTM Audio Recognition</h3>
+                            <p class="text-center text-gray-600">Speaker ID, Emotion & Keyword detection</p>
+                        </div>
+                        <div
+                            class="project-back bg-gray-800 rounded-xl p-6 shadow-lg h-full flex flex-col justify-center">
+                            <h3 class="text-xl font-bold text-white mb-4">Project Details</h3>
+                            <p class="text-white mb-2"><i class="fas fa-tools mr-2"></i> Python, TensorFlow, Librosa,
+                                NumPy</p>
+                            <p class="text-white mb-4"><i class="fas fa-user-tie mr-2"></i> End-to-end development</p>
+                            <button class="bg-white navy-blue-text px-4 py-2 rounded-lg font-bold mt-auto">View
+                                Project</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="section">
+                    <div class="h-64 relative project-card">
+                        <div
+                            class="project-front bg-white rounded-xl p-6 shadow-lg h-full flex flex-col justify-center items-center">
+                            <div
+                                class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-hand-holding-usd text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-center mb-2">Loan Eligibility Prediction</h3>
+                            <p class="text-center text-gray-600">Credit risk assessment model</p>
+                        </div>
+                        <div
+                            class="project-back bg-gray-800 rounded-xl p-6 shadow-lg h-full flex flex-col justify-center">
+                            <h3 class="text-xl font-bold text-white mb-4">Project Details</h3>
+                            <p class="text-white mb-2"><i class="fas fa-tools mr-2"></i> R, Python, Scikit-learn, pandas
+                            </p>
+                            <p class="text-white mb-4"><i class="fas fa-user-tie mr-2"></i> Data cleaning & model
+                                training</p>
+                            <button class="bg-white navy-blue-text px-4 py-2 rounded-lg font-bold mt-auto">View
+                                Project</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="section">
+                    <div class="h-64 relative project-card">
+                        <div
+                            class="project-front bg-white rounded-xl p-6 shadow-lg h-full flex flex-col justify-center items-center">
+                            <div
+                                class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-money-bill-wave text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-center mb-2">Fake Currency Detection</h3>
+                            <p class="text-center text-gray-600">ML model to detect counterfeit bills</p>
+                        </div>
+                        <div
+                            class="project-back bg-gray-800 rounded-xl p-6 shadow-lg h-full flex flex-col justify-center">
+                            <h3 class="text-xl font-bold text-white mb-4">Project Details</h3>
+                            <p class="text-white mb-2"><i class="fas fa-tools mr-2"></i> MATLAB, Python, OpenCV</p>
+                            <p class="text-white mb-4"><i class="fas fa-user-tie mr-2"></i> Preprocessing &
+                                classification</p>
+                            <a href="https://github.com/Mondssss/Fake-Currency-Detection-using-Signal-Image-Processing"
+                                target="_blank"
+                                class="bg-white navy-blue-text px-4 py-2 rounded-lg font-bold mt-auto text-center hover:bg-gray-100 transition">View
+                                Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="section">
+                    <div class="h-64 relative project-card">
+                        <div
+                            class="project-front bg-white rounded-xl p-6 shadow-lg h-full flex flex-col justify-center items-center">
+                            <div
+                                class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-film text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-center mb-2">Movie Recommender</h3>
+                            <p class="text-center text-gray-600">Hybrid recommendation system</p>
+                        </div>
+                        <div
+                            class="project-back bg-gray-800 rounded-xl p-6 shadow-lg h-full flex flex-col justify-center">
+                            <h3 class="text-xl font-bold text-white mb-4">Project Details</h3>
+                            <p class="text-white mb-2"><i class="fas fa-tools mr-2"></i> Python, Pandas, Scikit-learn
+                            </p>
+                            <p class="text-white mb-4"><i class="fas fa-user-tie mr-2"></i> Hybrid logic implementation
+                            </p>
+                            <a href="https://github.com/Mondssss/Capstone-Movie-Recommendation-System" target="_blank"
+                                class="bg-white navy-blue-text px-4 py-2 rounded-lg font-bold mt-auto text-center hover:bg-gray-100 transition">View
+                                Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="section">
+                    <div class="h-64 relative project-card">
+                        <div
+                            class="project-front bg-white rounded-xl p-6 shadow-lg h-full flex flex-col justify-center items-center">
+                            <div
+                                class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                                <i class="fas fa-comments text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-center mb-2">NLP Chatbot</h3>
+                            <p class="text-center text-gray-600">Basic conversational agent</p>
+                        </div>
+                        <div
+                            class="project-back bg-gray-800 rounded-xl p-6 shadow-lg h-full flex flex-col justify-center">
+                            <h3 class="text-xl font-bold text-white mb-4">Project Details</h3>
+                            <p class="text-white mb-2"><i class="fas fa-tools mr-2"></i> Python, NLTK, spaCy</p>
+                            <p class="text-white mb-4"><i class="fas fa-user-tie mr-2"></i> Full implementation</p>
+                            <button class="bg-white navy-blue-text px-4 py-2 rounded-lg font-bold mt-auto">View
+                                Project</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View More Button -->
+                <div class="section">
+                    <div
+                        class="h-64 bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm rounded-xl p-6 shadow-lg flex flex-col justify-center items-center">
+                        <div
+                            class="w-16 h-16 rounded-full bg-white flex items-center justify-center navy-blue-text mb-4">
+                            <i class="fas fa-plus text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-2 text-white">More Projects</h3>
+                        <p class="text-center text-white">Check out my GitHub for additional projects</p>
+                        <a href="https://github.com/Mondssss" target="_blank"
+                            class="bg-white navy-blue-text px-6 py-3 rounded-lg font-bold mt-6 hover:bg-gray-100 transition">View
+                            GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section with Background Image -->
+    <section class="py-20 bg-section certifications-bg">
+        <div class="container mx-auto px-6 bg-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 navy-blue-text section">Certifications</h2>
+
+            <div class="max-w-3xl mx-auto">
+                <div class="timeline-item section">
+                    <h3 class="text-xl font-bold navy-blue-text mb-2">SANCS (Southern Africa - Netherlands Cyber
+                        Security School)</h3>
+                    <p class="text-gray-600 mb-1">2025</p>
+                    <p class="text-gray-700">5-member team, gained exposure to real-world cyber policy, machine learning
+                        threats, and ethical AI</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 navy-blue-bg">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-white section">Professional Experience</h2>
+
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="bg-white rounded-xl p-6 shadow-lg experience-card section">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                        <h3 class="text-xl font-bold navy-blue-text">Temporary Examination Assistant, NC Department of
+                            Education</h3>
+                        <span class="text-gray-600">Dec 2024</span>
+                    </div>
+                    <p class="text-gray-700">Managed data entry and verification under tight deadlines.</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-lg experience-card section">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                        <h3 class="text-xl font-bold navy-blue-text">Tutor & Social Media Manager, Google Developers
+                            Student Clubs</h3>
+                        <span class="text-gray-600">2023–2024</span>
+                    </div>
+                    <p class="text-gray-700">Taught foundational tech concepts to peers and managed event
+                        communications.</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-lg experience-card section">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                        <h3 class="text-xl font-bold navy-blue-text">High School Tutor, The Swot Club</h3>
+                        <span class="text-gray-600">2022–2023</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community & Leadership Section with Background Image -->
+    <section class="py-20 bg-section community-bg">
+        <div class="container mx-auto px-6 bg-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 navy-blue-text section">Community & Leadership
+            </h2>
+
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md section"
+                    style="background-color: rgba(249, 250, 251, 0.9)">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full navy-blue-bg flex items-center justify-center text-white mr-4">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold navy-blue-text">Sol Plaatje University Data Science Club</h3>
+                    </div>
+                    <p class="text-gray-700">Member of the university's data science club.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md section"
+                    style="background-color: rgba(249, 250, 251, 0.9)">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full navy-blue-bg flex items-center justify-center text-white mr-4">
+                            <i class="fas fa-chalkboard-teacher text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold navy-blue-text">Workshop Facilitator & Marketing Lead</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2">Data Science Club, SPU (2024–Present)</p>
+                    <p class="text-gray-700">Ran peer workshops on Python and AI tools, led advertising and
+                        communication strategy for events.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="py-20 navy-blue-bg">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-white section">Achievements</h2>
+
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center text-center achievement-badge section">
+                    <div class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                        <i class="fas fa-trophy text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold navy-blue-text mb-2">Standard Bank Bursary</h3>
+                    <p class="text-gray-600">2025</p>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center text-center achievement-badge section">
+                    <div class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                        <i class="fas fa-key text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold navy-blue-text mb-2">Golden Key Society</h3>
+                    <p class="text-gray-600">2025</p>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center text-center achievement-badge section">
+                    <div class="w-16 h-16 rounded-full navy-blue-bg flex items-center justify-center text-white mb-4">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold navy-blue-text mb-2">SANCS Participation</h3>
+                    <p class="text-gray-600">2024</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section with Background Image -->
+    <section id="contact" class="py-20 bg-section contact-bg">
+        <div class="container mx-auto px-6 bg-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 navy-blue-text section">Get In Touch</h2>
+
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="section">
+                    <h3 class="text-2xl font-bold navy-blue-text mb-6">Contact Information</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div
+                                class="w-10 h-10 rounded-full navy-blue-bg flex items-center justify-center text-white mr-4">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-700">Email</p>
+                                <a href="mailto:mondemwansa@gmail.com"
+                                    class="text-gray-600 hover:underline">mondemwansa@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-bold navy-blue-text mt-10 mb-6">Connect With Me</h3>
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-blue-100 social-icon">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                        <a href="https://github.com/Mondssss"
+                            class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 social-icon">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                    </div>
+
+                    <a href="Monde Mwansa CV.pdf" target="_blank"
+                        class="mt-8 bg-blue-800 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-900 transition pulse inline-block">
+                        <i class="fas fa-download mr-2"></i> View My Resume
+                    </a>
+                </div>
+
+                <div class="section">
+                    <h3 class="text-2xl font-bold navy-blue-text mb-6">Send Me a Message</h3>
+                    <form action="https://formspree.io/f/mgvzoqly" method="POST" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+                            <input type="text" id="name" name="name"
+                                class="w-full px-4 py-2 rounded-lg contact-input focus:outline-none"
+                                placeholder="Your name">
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                            <input type="email" id="email" name="email"
+                                class="w-full px-4 py-2 rounded-lg contact-input focus:outline-none"
+                                placeholder="Your email" required>
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                            <input type="text" id="subject" name="subject"
+                                class="w-full px-4 py-2 rounded-lg contact-input focus:outline-none"
+                                placeholder="Subject">
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                            <textarea id="message" name="message" rows="4"
+                                class="w-full px-4 py-2 rounded-lg contact-input focus:outline-none"
+                                placeholder="Your message" required></textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-blue-800 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-900 transition">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">© 2024 Monde Mwansa. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#about" class="text-gray-600 hover:text-blue-800 transition">Back to Top</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animation
+        document.addEventListener('DOMContentLoaded', function () {
+            const sections = document.querySelectorAll('.section');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
